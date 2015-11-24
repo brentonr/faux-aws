@@ -1,0 +1,17 @@
+<DescribeTagsResponse xmlns="http://ec2.amazonaws.com/doc/2015-10-01/">
+  <requestId>aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee</requestId>
+   <tagSet>
+      <item>
+         <instanceId>i-11111111</instanceId>
+         <resourceType>instance</resourceType>
+         <key>jenkins_build</key>
+         <value>jenkins-test-build</value>
+      </item>
+      <item>
+         <instanceId>i-11111111</instanceId>
+         <resourceType>instance</resourceType>
+         <key>zk_node_count</key>
+         <value>3</value>
+      </item>
+    </tagSet>
+</DescribeTagsResponse>
