@@ -43,7 +43,12 @@ All commands to the IMDS HTTP endpoint should be redirected to the server, howev
 Options:
 
 * Always provide a hostname in `/etc/hosts` whether testing with Faux AWS or deployed on EC2. For example, an entry of `172.17.42.1 imdshost` when running inside a Docker container (and serving Faux AWS from a host-bound port available on the docker bridge IP, whatever that may be), or `169.254.169.254 imdshost` when running on EC2. All calls would then use `http://imdshost/latest/...` as their IMDS URL.
-* Change calls to IMDS when running locally to use the Faux AWS URL explicitly.
+* Change calls to IMDS when running locally to use the Faux AWS URL explicitly (note there doesn't appear to be a way to change AWS CLI's calls to IMDS)
+* Use iptables to rewrite outgoing requests to `169.254.169.254:80` into your target IP and port, as in
+
+```
+iptables -t nat -I OUTPUT -p tcp --dst 169.254.169.254 --dport 80 -j DNAT --to-destination 172.17.0.1:5000
+```
 
 Common problems:
 * Commonly, curl and wget will not use DNS when the provided hostname for a URL is formatted as an IPv4 address. Intead it will assume the hostname is an IP and skip the DNS lookup. Thus, tricks with the /etc/hosts file won't help to transparently redirect curl or wget to a new host when attempting to reach `169.254.169.254`.
