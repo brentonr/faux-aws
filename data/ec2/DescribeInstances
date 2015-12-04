@@ -10,35 +10,7 @@
               <code>16</code>
               <name>running</name>
             </instanceState>
-            <privateIpAddress>10.0.0.12</privateIpAddress>
-            <tagSet>
-              <item>
-                <key>mesos_server_class</key>
-                <value>mgmt</value>
-              </item>
-            </tagSet>
-          </item>
-          <item>
-            <instanceId>i-22222222</instanceId>
-            <instanceState>
-              <code>16</code>
-              <name>running</name>
-            </instanceState>
-            <privateIpAddress>10.0.0.13</privateIpAddress>
-            <tagSet>
-              <item>
-                <key>mesos_server_class</key>
-                <value>mgmt</value>
-              </item>
-            </tagSet>
-          </item>
-          <item>
-            <instanceId>i-33333333</instanceId>
-            <instanceState>
-              <code>16</code>
-              <name>running</name>
-            </instanceState>
-            <privateIpAddress>10.0.0.14</privateIpAddress>
+            <privateIpAddress>{{ remote_address }}</privateIpAddress>
             <tagSet>
               <item>
                 <key>mesos_server_class</key>

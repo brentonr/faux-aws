@@ -11,7 +11,7 @@
          <instanceId>i-11111111</instanceId>
          <resourceType>instance</resourceType>
          <key>zk_node_count</key>
-         <value>3</value>
+         <value>1</value>
       </item>
     </tagSet>
 </DescribeTagsResponse>

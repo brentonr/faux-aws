@@ -1,5 +1,6 @@
 import os
-from flask import Flask, request
+import pprint
+from flask import Flask, request, render_template_string
 from werkzeug.serving import run_simple
 
 aws_endpoints = Flask(__name__ + "aws")
@@ -31,6 +32,7 @@ def imds(path):
         path = os.path.join('imds', path)
     internal_path = os.path.join(root, path)
     print 'internal_path = "' + internal_path + '"'
+    print 'remote address = "' + request.environ['REMOTE_ADDR'] + '"'
     if os.path.exists(internal_path):
         if (os.path.isdir(internal_path)) and path.endswith('/'):
             return '\n'.join(os.listdir(internal_path))
@@ -38,7 +40,7 @@ def imds(path):
             internal_file = open(internal_path, 'r')
             contents = internal_file.read()
             internal_file.close()
-            return contents
+            return render_template_string(contents, remote_address=request.environ['REMOTE_ADDR'])
     return imdsNotFoundXml
 
 
