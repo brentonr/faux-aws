@@ -16,6 +16,33 @@
                 <key>mesos_server_class</key>
                 <value>mgmt</value>
               </item>
+              <item>
+                <key>jenkins_build</key>
+                <value>jenkins-test-build</value>
+              </item>
+            </tagSet>
+          </item>
+        </instancesSet>
+      </item>
+      <item>
+        <reservationId>r-11111112</reservationId>
+        <instancesSet>
+          <item>
+            <instanceId>i-11111112</instanceId>
+            <instanceState>
+              <code>16</code>
+              <name>running</name>
+            </instanceState>
+            <privateIpAddress>{{ remote_address }}</privateIpAddress>
+            <tagSet>
+              <item>
+                <key>mesos_server_class</key>
+                <value>message_queue</value>
+              </item>
+              <item>
+                <key>jenkins_build</key>
+                <value>jenkins-test-build</value>
+              </item>
             </tagSet>
           </item>
         </instancesSet>

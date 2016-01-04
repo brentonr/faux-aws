@@ -2,16 +2,40 @@
   <requestId>aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee</requestId>
    <tagSet>
       <item>
-         <instanceId>i-11111111</instanceId>
+         <resourceId>i-11111111</resourceId>
          <resourceType>instance</resourceType>
          <key>jenkins_build</key>
          <value>jenkins-test-build</value>
       </item>
       <item>
-         <instanceId>i-11111111</instanceId>
+         <resourceId>i-11111111</resourceId>
          <resourceType>instance</resourceType>
          <key>zk_node_count</key>
          <value>1</value>
+      </item>
+      <item>
+         <resourceId>i-11111111</resourceId>
+         <resourceType>instance</resourceType>
+         <key>mesos_server_class</key>
+         <value>docker</value>
+      </item>
+      <item>
+         <resourceId>i-11111112</resourceId>
+         <resourceType>instance</resourceType>
+         <key>jenkins_build</key>
+         <value>jenkins-test-build</value>
+      </item>
+      <item>
+         <resourceId>i-11111112</resourceId>
+         <resourceType>instance</resourceType>
+         <key>message_queue_node_count</key>
+         <value>1</value>
+      </item>
+      <item>
+         <resourceId>i-11111112</resourceId>
+         <resourceType>instance</resourceType>
+         <key>mesos_server_class</key>
+         <value>message_queue</value>
       </item>
     </tagSet>
 </DescribeTagsResponse>
