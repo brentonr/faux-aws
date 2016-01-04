@@ -1,10 +1,17 @@
 import os
-import pprint
+import re
+import lxml.etree as etree
+import services.ec2
+from common.filter import Filter, getFilters
 from flask import Flask, request, render_template_string
 from werkzeug.serving import run_simple
 
 aws_endpoints = Flask(__name__ + "aws")
 aws_endpoints.debug = True
+
+awsServices = {
+    'ec2': services.ec2
+}
 
 imdsNotFoundXml = """<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -18,31 +25,41 @@ imdsNotFoundXml = """<?xml version="1.0" encoding="iso-8859-1"?>
  </body>
 </html>
 """
-
-awsServiceList = [ 'ec2' ]
+      
+def readDataFile(filename):
+    data_file = open(filename, 'r')
+    contents = data_file.read()
+    data_file.close()
+    return contents
 
 @aws_endpoints.route('/', defaults={'path': ''})
 @aws_endpoints.route('/<path:path>', methods=['GET','POST'])
-def imds(path):
+def handler(path):
     root = "./data"
 
-    if path.split('/', 1)[0] in awsServiceList:
-        path = os.path.join(path.split('/', 1)[0], request.form['Action'] if 'Action' in request.form else '')
+    service = path.split('/', 1)[0]
+    if service in awsServices:
+        action = request.form['Action'] if 'Action' in request.form else ''
+        path = os.path.join(path.split('/', 1)[0], action)
+        data_path = os.path.join(root, path)
+        if os.path.isfile(data_path):
+            contents = readDataFile(data_path)
+            root = etree.fromstring(contents)
+            filters = getFilters(request.form)
+            if hasattr(awsServices[service], 'filter'):
+                awsServices[service].filter(action, root, filters)
+            return render_template_string(etree.tostring(root), remote_address=request.environ['REMOTE_ADDR'])
+        return ""
     else:
         path = os.path.join('imds', path)
-    internal_path = os.path.join(root, path)
-    print 'internal_path = "' + internal_path + '"'
-    print 'remote address = "' + request.environ['REMOTE_ADDR'] + '"'
-    if os.path.exists(internal_path):
-        if (os.path.isdir(internal_path)) and path.endswith('/'):
-            return '\n'.join(os.listdir(internal_path))
-        elif (os.path.isfile(internal_path)) and not path.endswith('/'):
-            internal_file = open(internal_path, 'r')
-            contents = internal_file.read()
-            internal_file.close()
+        data_path = os.path.join(root, path)
+        if (os.path.isdir(data_path)) and path.endswith('/'):
+            return '\n'.join(os.listdir(data_path))
+        elif os.path.isfile(data_path):
+            contents = readDataFile(data_path)
             return render_template_string(contents, remote_address=request.environ['REMOTE_ADDR'])
-    return imdsNotFoundXml
+        return imdsNotFoundXml
 
 
 if __name__ == "__main__":
-    run_simple('0.0.0.0', 5000, aws_endpoints, use_debugger=True, use_reloader=True)
+    run_simple('0.0.0.0', 5001, aws_endpoints, use_debugger=True, use_reloader=True)
